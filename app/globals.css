@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Focus Ivory: Paper-like, sophisticated Light Mode */
+    --background: 45 25% 98%;
+    --foreground: 240 10% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 8%;
+    --primary: 142 76% 24%; /* Sophisticated Deep Forest Green */
+    --primary-foreground: 45 25% 98%;
+    --secondary: 45 15% 92%;
+    --secondary-foreground: 240 10% 8%;
+    --muted: 240 5% 94%;
+    --muted-foreground: 240 5% 40%;
+    --accent: 142 76% 24%;
+    --accent-foreground: 45 25% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 240 6% 88%;
+    --input: 240 6% 88%;
+    --ring: 142 76% 24%;
+    --radius: 1.25rem;
+  }
+
+  .dark {
+    /* Focus Dark: Deep Zinc & Vibrant Primary */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 142 70% 50%;
+    --primary-foreground: 144 100% 2%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 142 70% 50%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 142 70% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+.safe-area-bottom {
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  height: calc(5rem + env(safe-area-inset-bottom));
+}
+
+.chatbot-message-user {
+  @apply bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white rounded-2xl rounded-tr-none px-6 py-5 ml-auto max-w-[85%] shadow-sm border border-zinc-200 dark:border-zinc-700/50;
+}
+
+.chatbot-message-ai {
+  @apply bg-zinc-50 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-300 rounded-2xl rounded-tl-none px-7 py-6 mr-auto max-w-[85%] shadow-sm border border-zinc-200 dark:border-zinc-800/50;
+}
+
+.glow-primary {
+  box-shadow: 0 0 25px hsl(var(--primary) / 0.15);
+}
+
+.shadow-glow {
+  filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.5));
+}
+
+.shadow-glow-sm {
+  filter: drop-shadow(0 0 4px hsl(var(--primary) / 0.4));
+}
+
+.animate-pop {
+  animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 1.5s Blink for Status Indicators as requested */
+.animate-blink-status {
+  animation: blink 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.1); }
+}
+
+/* Animated Background for Landing */
+.focus-bg-animation {
+  background: radial-gradient(circle at 50% 50%, #09090b 0%, #020617 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+.focus-bg-glow {
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(22, 163, 74, 0.05) 0%, transparent 70%);
+  filter: blur(80px);
+  animation: float-glow 20s infinite alternate ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes float-glow {
+  0% { transform: translate(-10%, -10%) scale(1); }
+  100% { transform: translate(10%, 10%) scale(1.1); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-200 dark:bg-zinc-800 rounded-full;
+}

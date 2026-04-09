@@ -1,0 +1,87 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isExistingOwner(userId) {
+      return resource != null && isOwner(userId);
+    }
+
+    function isFriend(data) {
+      return isSignedIn() && (request.auth.uid == data.user1Id || request.auth.uid == data.user2Id);
+    }
+
+    match /users/{userId} {
+      allow get, list: if true; 
+      allow create: if isOwner(userId);
+      allow update, delete: if isExistingOwner(userId);
+
+      match /settings/{allPaths=**} {
+        allow get, list, create, update, delete: if isOwner(userId);
+      }
+
+      match /friends/{friendId} {
+        allow get, list: if isOwner(userId);
+        // Allow the owner OR the person being added (for reciprocal acceptance)
+        allow create, update: if isOwner(userId) || (isSignedIn() && request.auth.uid == friendId);
+        allow delete: if isOwner(userId) || (isSignedIn() && request.auth.uid == friendId);
+      }
+
+      match /friendRequests/{requestId} {
+        // The owner of the requests list can manage it
+        allow get, list, update, delete: if isOwner(userId);
+        // The sender (requestId) can create or update their own request in someone else's list
+        allow create, update: if isSignedIn() && request.auth.uid == requestId;
+      }
+
+      match /habits/{allPaths=**} {
+        allow get, list, create, update, delete: if isOwner(userId);
+      }
+
+      match /daily_completions/{allPaths=**} {
+        allow get, list, create, update, delete: if isOwner(userId);
+      }
+
+      match /goals/{allPaths=**} {
+        allow get, list, create, update, delete: if isOwner(userId);
+      }
+
+      match /goalHabitLinks/{allPaths=**} {
+        allow get, list, create, update, delete: if isOwner(userId);
+      }
+
+      match /focusSessions/{allPaths=**} {
+        allow get, list, create, update, delete: if isOwner(userId);
+      }
+
+      match /achievements/{allPaths=**} {
+        allow get, list, create, update, delete: if isOwner(userId);
+      }
+    }
+
+    match /achievements/{achievementId} {
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if false;
+    }
+
+    match /friendships/{friendshipId} {
+      allow get: if isFriend(resource.data);
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && (request.resource.data.user1Id == request.auth.uid || request.resource.data.user2Id == request.auth.uid);
+      allow update: if isFriend(resource.data);
+      allow delete: if isFriend(resource.data);
+    }
+
+    match /studyRooms/{roomId} {
+      allow get, list, create, update, delete: if isSignedIn();
+    }
+  }
+}

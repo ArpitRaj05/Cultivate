@@ -1,0 +1,28 @@
+{
+  "placeholderImages": [
+    {
+      "id": "growth-hero",
+      "description": "Abstract growth and nature",
+      "imageUrl": "https://picsum.photos/seed/growth/1200/400",
+      "imageHint": "green growth"
+    },
+    {
+      "id": "meditation",
+      "description": "Mindfulness and focus",
+      "imageUrl": "https://picsum.photos/seed/meditation/400/300",
+      "imageHint": "focus meditation"
+    },
+    {
+      "id": "reading",
+      "description": "A person reading focused",
+      "imageUrl": "https://picsum.photos/seed/reading/400/300",
+      "imageHint": "focused reading"
+    },
+    {
+      "id": "exercise",
+      "description": "Active lifestyle",
+      "imageUrl": "https://picsum.photos/seed/exercise/400/300",
+      "imageHint": "fitness growth"
+    }
+  ]
+}

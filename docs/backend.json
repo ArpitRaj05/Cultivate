@@ -1,0 +1,677 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents an individual user of the Cultivate Focus application, linked to an external authentication system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "externalAuthId": {
+          "type": "string",
+          "description": "Identifier from the external authentication provider (e.g., Google, Firebase). This ID uniquely identifies the user in the authentication system. (Relationship: User 1:1 ExternalAuthSystem)"
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address, primarily used for identification and communication within the app (not for password-based authentication).",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "A user-friendly name displayed in the app, for personalization and visible to friends."
+        },
+        "themePreference": {
+          "type": "string",
+          "description": "The user's preferred application theme setting.",
+          "format": "enum",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the user account was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "externalAuthId",
+        "email",
+        "displayName",
+        "themePreference",
+        "createdAt"
+      ]
+    },
+    "Habit": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Habit",
+      "type": "object",
+      "description": "Represents a recurring activity or routine a user wants to track and cultivate.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Habit entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who owns this habit. (Relationship: User 1:N Habit)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The short, descriptive name of the habit (e.g., 'Meditate', 'Read')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed explanation or purpose of the habit."
+        },
+        "frequency": {
+          "type": "string",
+          "description": "Describes how often the habit should be performed (e.g., 'daily', 'weekly', 'Mon,Wed,Fri')."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "The date when the user started tracking this habit.",
+          "format": "date"
+        },
+        "targetValue": {
+          "type": "number",
+          "description": "An optional numerical target for the habit (e.g., '30' for 30 minutes, '5' for 5 repetitions)."
+        },
+        "unit": {
+          "type": "string",
+          "description": "The unit of measurement for the targetValue (e.g., 'minutes', 'pages', 'reps')."
+        },
+        "reminderTime": {
+          "type": "string",
+          "description": "Optional time of day for a habit reminder.",
+          "format": "time"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the habit was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "name",
+        "description",
+        "frequency",
+        "startDate",
+        "createdAt"
+      ]
+    },
+    "Goal": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Goal",
+      "type": "object",
+      "description": "Represents a long-term objective that a user aims to achieve through consistent effort.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Goal entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who owns this goal. (Relationship: User 1:N Goal)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The short, descriptive name of the goal (e.g., 'Write a book', 'Run a marathon')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed explanation of the goal and its importance."
+        },
+        "targetDate": {
+          "type": "string",
+          "description": "The intended date by which the goal should be achieved.",
+          "format": "date"
+        },
+        "currentProgress": {
+          "type": "number",
+          "description": "The current measured progress towards the goal (e.g., a numerical value or percentage)."
+        },
+        "targetValue": {
+          "type": "number",
+          "description": "The specific numerical target or desired outcome for the goal (e.g., '10' for 10 kg weight loss, '50000' for words written)."
+        },
+        "unit": {
+          "type": "string",
+          "description": "The unit of measurement for the goal's progress and target (e.g., 'kg', 'words', 'percentage')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the goal was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "name",
+        "description",
+        "targetDate",
+        "currentProgress",
+        "createdAt"
+      ]
+    },
+    "HabitCompletion": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "HabitCompletion",
+      "type": "object",
+      "description": "Records a specific instance of a habit being completed by a user on a given day, used for progress tracking and visualization.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the HabitCompletion entity."
+        },
+        "habitId": {
+          "type": "string",
+          "description": "Reference to the Habit that was completed. (Relationship: Habit 1:N HabitCompletion)"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who completed the habit. (Relationship: User 1:N HabitCompletion)"
+        },
+        "completionDate": {
+          "type": "string",
+          "description": "The date on which the habit was completed.",
+          "format": "date"
+        },
+        "completedValue": {
+          "type": "number",
+          "description": "The actual value achieved for habits with a numerical target (e.g., 25 minutes of meditation, 10 pages read)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the habit completion record was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "habitId",
+        "userId",
+        "completionDate",
+        "createdAt"
+      ]
+    },
+    "GoalHabitLink": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "GoalHabitLink",
+      "type": "object",
+      "description": "Links a specific habit to a goal, indicating that the habit contributes to achieving that goal. This entity models a Many-to-Many relationship where the link itself has unique attributes.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the GoalHabitLink entity."
+        },
+        "goalId": {
+          "type": "string",
+          "description": "Reference to the Goal this habit contributes to. (Relationship: Goal 1:N GoalHabitLink)"
+        },
+        "habitId": {
+          "type": "string",
+          "description": "Reference to the Habit that contributes to the goal. (Relationship: Habit 1:N GoalHabitLink)"
+        },
+        "contributionFactor": {
+          "type": "number",
+          "description": "A numerical value (e.g., 0.0 to 1.0) indicating how much this specific habit contributes to the overall progress of the linked goal."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the link between the habit and goal was established.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "goalId",
+        "habitId",
+        "createdAt"
+      ]
+    },
+    "FocusSession": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "FocusSession",
+      "type": "object",
+      "description": "Records details of a user's focused work or study session using the app's interactive focus timer.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the FocusSession entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who conducted this focus session. (Relationship: User 1:N FocusSession)"
+        },
+        "startTime": {
+          "type": "string",
+          "description": "The timestamp when the focus session began.",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "The timestamp when the focus session ended.",
+          "format": "date-time"
+        },
+        "durationMinutes": {
+          "type": "number",
+          "description": "The total duration of the focus session in minutes."
+        },
+        "status": {
+          "type": "string",
+          "description": "The outcome or state of the focus session (e.g., 'completed', 'interrupted', 'skipped').",
+          "format": "enum",
+          "items": {
+            "type": "string"
+          }
+        },
+        "associatedHabitId": {
+          "type": "string",
+          "description": "Optional reference to a Habit if the focus session was dedicated to working on it. (Relationship: Habit 0..1 FocusSession)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the focus session record was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "startTime",
+        "endTime",
+        "durationMinutes",
+        "status",
+        "createdAt"
+      ]
+    },
+    "Achievement": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Achievement",
+      "type": "object",
+      "description": "Defines a gamified accomplishment or badge that users can earn within the app.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Achievement entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The title of the achievement (e.g., 'Habit Master', 'Focus Streak')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the achievement, explaining what it represents."
+        },
+        "criteria": {
+          "type": "string",
+          "description": "A description of the conditions or actions required to earn this achievement (e.g., 'Complete 7 habits in a row', 'Achieve 100 focus hours')."
+        },
+        "iconUrl": {
+          "type": "string",
+          "description": "URL to an image or icon representing the achievement.",
+          "format": "uri"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the achievement definition was created in the system.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "criteria",
+        "createdAt"
+      ]
+    },
+    "UserAchievement": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserAchievement",
+      "type": "object",
+      "description": "Records an instance of a specific user earning a particular achievement, enabling tracking of gamified progress.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserAchievement entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who earned the achievement. (Relationship: User 1:N UserAchievement)"
+        },
+        "achievementId": {
+          "type": "string",
+          "description": "Reference to the Achievement that was earned. (Relationship: Achievement 1:N UserAchievement)"
+        },
+        "earnedAt": {
+          "type": "string",
+          "description": "Timestamp when the achievement was earned by the user.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "achievementId",
+        "earnedAt"
+      ]
+    },
+    "Friendship": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Friendship",
+      "type": "object",
+      "description": "Represents a friendship connection between two users within the app, facilitating shared progress and social engagement.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Friendship entity."
+        },
+        "user1Id": {
+          "type": "string",
+          "description": "Reference to the initiating or (by convention) the user with the lexicographically smaller ID in the friendship. (Relationship: User N:N Friendship)"
+        },
+        "user2Id": {
+          "type": "string",
+          "description": "Reference to the receiving or (by convention) the user with the lexicographically larger ID in the friendship. (Relationship: User N:N Friendship)"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the friendship request or connection.",
+          "format": "enum",
+          "items": {
+            "type": "string"
+          }
+        },
+        "initiatedAt": {
+          "type": "string",
+          "description": "Timestamp when the friendship request was initiated.",
+          "format": "date-time"
+        },
+        "acceptedAt": {
+          "type": "string",
+          "description": "Optional timestamp when the friendship request was accepted.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "user1Id",
+        "user2Id",
+        "status",
+        "initiatedAt"
+      ]
+    },
+    "Notification": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Notification",
+      "type": "object",
+      "description": "Stores notifications for users, such as friend requests, shared progress updates, or habit reminders, to enhance engagement.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Notification entity."
+        },
+        "recipientUserId": {
+          "type": "string",
+          "description": "Reference to the User who is the intended recipient of the notification. (Relationship: User 1:N Notification)"
+        },
+        "senderUserId": {
+          "type": "string",
+          "description": "Optional reference to the User who triggered or sent the notification (e.g., in a friend request or progress share). (Relationship: User 0..1 Notification)"
+        },
+        "type": {
+          "type": "string",
+          "description": "The category or nature of the notification.",
+          "format": "enum",
+          "items": {
+            "type": "string"
+          }
+        },
+        "message": {
+          "type": "string",
+          "description": "The actual text content of the notification."
+        },
+        "isRead": {
+          "type": "boolean",
+          "description": "Indicates whether the user has viewed this notification."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the notification was generated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "recipientUserId",
+        "type",
+        "message",
+        "isRead",
+        "createdAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores individual user profiles. The userId in the path corresponds directly to the authenticated user's ID (request.auth.uid) for path-based ownership and access control."
+        }
+      },
+      {
+        "path": "/users/{userId}/habits/{habitId}",
+        "definition": {
+          "entityName": "Habit",
+          "schema": {
+            "$ref": "#/backend/entities/Habit"
+          },
+          "description": "Stores habits created by a specific user. The userId in the path provides direct authorization context. The document also contains userId for strong ownership invariants.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns this habit."
+            },
+            {
+              "name": "habitId",
+              "description": "The unique identifier for the specific habit."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/goals/{goalId}",
+        "definition": {
+          "entityName": "Goal",
+          "schema": {
+            "$ref": "#/backend/entities/Goal"
+          },
+          "description": "Stores goals created by a specific user. The userId in the path provides direct authorization context. The document also contains userId for strong ownership invariants.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns this goal."
+            },
+            {
+              "name": "goalId",
+              "description": "The unique identifier for the specific goal."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/habits/{habitId}/completions/{completionId}",
+        "definition": {
+          "entityName": "HabitCompletion",
+          "schema": {
+            "$ref": "#/backend/entities/HabitCompletion"
+          },
+          "description": "Records instances of a user completing a specific habit. The userId and habitId in the path provide direct authorization and context. The document also contains userId and habitId for ownership invariants.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who completed the habit."
+            },
+            {
+              "name": "habitId",
+              "description": "The unique identifier of the habit that was completed."
+            },
+            {
+              "name": "completionId",
+              "description": "The unique identifier for this specific habit completion record."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/daily_completions/{completionId}",
+        "definition": {
+          "entityName": "DailyCompletion",
+          "schema": {
+             "type": "object",
+             "properties": {
+               "id": { "type": "string" },
+               "userId": { "type": "string" },
+               "completionDate": { "type": "string" },
+               "isCompleted": { "type": "boolean" }
+             },
+             "required": ["id", "userId", "completionDate", "isCompleted"]
+          },
+          "description": "Simplified tracking for daily completion streaks."
+        }
+      },
+      {
+        "path": "/users/{userId}/goalHabitLinks/{goalHabitLinkId}",
+        "definition": {
+          "entityName": "GoalHabitLink",
+          "schema": {
+            "$ref": "#/backend/entities/GoalHabitLink"
+          },
+          "description": "Links a specific habit to a goal for a user. To ensure Authorization Independence, this document *must* include the 'userId' field, even though it's not in the original schema, so that rules can directly verify ownership against request.auth.uid.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns this goal-habit link."
+            },
+            {
+              "name": "goalHabitLinkId",
+              "description": "The unique identifier for the link between a goal and a habit."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/focusSessions/{sessionId}",
+        "definition": {
+          "entityName": "FocusSession",
+          "schema": {
+            "$ref": "#/backend/entities/FocusSession"
+          },
+          "description": "Records details of a user's focused work sessions. The userId in the path provides direct authorization context. The document also contains userId for strong ownership invariants.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who conducted the focus session."
+            },
+            {
+              "name": "sessionId",
+              "description": "The unique identifier for the specific focus session."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/achievements/{achievementId}",
+        "definition": {
+          "entityName": "Achievement",
+          "schema": {
+            "$ref": "#/backend/entities/Achievement"
+          },
+          "description": "Stores global definitions of achievements available in the application. These are read-only for all users.",
+          "params": [
+            {
+              "name": "achievementId",
+              "description": "The unique identifier for a specific achievement definition."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/achievements/{userAchievementId}",
+        "definition": {
+          "entityName": "UserAchievement",
+          "schema": {
+            "$ref": "#/backend/entities/UserAchievement"
+          },
+          "description": "Records which achievements a specific user has earned. The userId in the path provides direct authorization context. The document also contains userId for strong ownership invariants.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who earned the achievement."
+            },
+            {
+              "name": "userAchievementId",
+              "description": "The unique identifier for the record of a user earning an achievement."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/friendships/{friendshipId}",
+        "definition": {
+          "entityName": "Friendship",
+          "schema": {
+            "$ref": "#/backend/entities/Friendship"
+          },
+          "description": "Manages friendship connections between two users. Documents contain user1Id and user2Id for direct authorization checks (membership map pattern) without relying on hierarchical dependencies. This supports secure list queries with explicit `where` clauses matching either user ID.",
+          "params": [
+            {
+              "name": "friendshipId",
+              "description": "The unique identifier for a specific friendship connection."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/notifications/{notificationId}",
+        "definition": {
+          "entityName": "Notification",
+          "schema": {
+            "$ref": "#/backend/entities/Notification"
+          },
+          "description": "Stores notifications intended for a specific user. The userId in the path directly matches the recipientUserId, providing clear, path-based ownership for authorization.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who is the recipient of the notification."
+            },
+            {
+              "name": "notificationId",
+              "description": "The unique identifier for a specific notification."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure for 'Cultivate Focus' prioritizes Authorization Independence and simplifies security rules by consistently using path-based ownership for user-specific data and denormalizing authorization-relevant fields. All user-specific data, such as Habits, Goals, HabitCompletions, GoalHabitLinks, FocusSessions, UserAchievements, and Notifications, are nested under a `/users/{userId}` path. This ensures that the user ID required for authorization is always directly available in the path, allowing rules to simply check `request.auth.uid == userId` without relying on `get()` operations, thereby preserving atomic writes and improving debugging.\n\nFor entities representing a many-to-many relationship (`GoalHabitLink`) or shared data (`Friendship`) that don't inherently sit under a single user's direct hierarchy, we apply denormalization where necessary. The `GoalHabitLink` entity, though logically linking user-owned habits and goals, is placed under `/users/{userId}/goalHabitLinks/{goalHabitLinkId}` and *must* include `userId` within its document data for explicit ownership, fulfilling the Authorization Independence mandate. Similarly, `Friendship` documents are top-level at `/friendships/{friendshipId}` and contain both `user1Id` and `user2Id`, allowing rules to check if `request.auth.uid` matches either ID directly, without `get()` calls.\n\n**QAPs (Queries as Authorization Primitives) Support:**\n\n1.  **User-owned Collections:** For collections like `/users/{userId}/habits`, `/users/{userId}/goals`, `/users/{userId}/focusSessions`, etc., `list` operations are implicitly secure. Security rules can easily ensure that `userId` in the path matches `request.auth.uid`. This means users can only list their own data, and no filtering is needed within rules, as the path itself acts as the filter.\n2.  **`Friendship` Collection:** For the `/friendships` collection, `list` queries require explicit filtering on the client side, such as `db.collection('friendships').where('user1Id', '==', request.auth.uid)` or `db.collection('friendships').where('user2Id', '==', request.auth.uid)`. Firestore security rules can enforce that any `list` operation on this collection *must* include a `where` clause that matches `request.auth.uid` against either `user1Id` or `user2Id`, ensuring no unauthorized access while enabling friends to discover their connections.\n3.  **`Achievement` Collection:** The `/achievements` collection, containing global achievement definitions, is designed for read-only access by all users. `list` operations here are unrestricted, allowing any user to view available achievements without specific authorization checks.\n\nThis design leverages structural segregation to group documents with similar security postures, uses consistent naming conventions, and explicitly models user ownership, leading to a robust, scalable, and easily debuggable Firestore security model."
+  }
+}
